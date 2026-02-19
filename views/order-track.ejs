@@ -11,6 +11,8 @@
         .step-line { position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #E2E8F0; z-index: 0; }
         .step-fill { position: absolute; left: 20px; top: 0; width: 2px; background: #2563EB; z-index: 1; transition: height 1s ease-in-out; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+        .cancelled-ring { animation: pulse-red 2s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
 <body class="pb-20">
@@ -28,34 +30,38 @@
             <div class="flex gap-5 items-center">
                 <div class="w-24 h-24 bg-slate-50 rounded-[1.8rem] overflow-hidden border border-slate-100 shrink-0 shadow-inner">
                     <% if (order.items && order.items.length > 0) { %>
-                        <% let firstItem = order.items[0]; %>
-                        <% if (Array.isArray(firstItem.images) && firstItem.images.length > 0) { %>
-                            <img src="<%= firstItem.images[0] %>" class="w-full h-full object-cover">
-                        <% } else { %>
-                            <img src="<%= firstItem.image %>" class="w-full h-full object-cover">
-                        <% } %>
+                        <img src="<%= order.items[0].images ? order.items[0].images[0] : order.items[0].image %>" class="w-full h-full object-cover">
                     <% } %>
                 </div>
                 <div>
                     <span class="text-[9px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-1 rounded-md">Order ID: #<%= order.id %></span>
-                    <h2 class="text-lg font-black italic uppercase leading-tight mt-2 text-slate-900"><%= order.items[0].name %></h2>
-                    <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase">Order Date: <%= order.date %></p>
+                    <h2 class="text-lg font-black italic uppercase leading-tight mt-2 text-slate-900 line-clamp-1"><%= order.items[0].name %></h2>
+                    <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase">Date: <%= order.date %></p>
                 </div>
             </div>
+            <% if(order.status.includes('CANCELLED')) { %>
+                <div class="mt-4 bg-red-50 p-3 rounded-2xl border border-red-100 flex items-center gap-3">
+                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <span class="text-[10px] font-black uppercase text-red-600 tracking-tighter">Order Cancelled by Admin</span>
+                </div>
+            <% } %>
         </div>
 
         <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white relative overflow-hidden">
-            <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-10">Live Tracking</h3>
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-10">Live Progress</h3>
             
             <div class="relative">
                 <div class="step-line"></div>
                 <% 
-                    let progressHeight = "10%";
-                    if(order.status.includes("Confirm")) progressHeight = "35%";
-                    if(order.status.includes("Shipped")) progressHeight = "65%";
-                    if(order.status.includes("Delivered")) progressHeight = "100%";
+                    let h = "8%"; // Default Pending
+                    let s = order.status.toUpperCase();
+                    if(s.includes("SHIPPED")) h = "66%";
+                    else if(s.includes("DELIVERED")) h = "100%";
+                    else if(s.includes("PENDING")) h = "8%";
+                    else if(s.includes("CANCELLED")) h = "0%";
+                    else h = "33%"; // Confirmed or other
                 %>
-                <div class="step-fill" style="height: <%= progressHeight %>;"></div>
+                <div class="step-fill" style="height: <%= h %>;"></div>
 
                 <div class="space-y-12 relative z-10">
                     <div class="flex items-center gap-6">
@@ -64,37 +70,37 @@
                         </div>
                         <div>
                             <p class="text-xs font-black uppercase italic text-slate-900">Order Placed</p>
-                            <p class="text-[9px] font-bold text-slate-400">Order successfully received</p>
+                            <p class="text-[9px] font-bold text-slate-400">Waiting for Verification</p>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-6">
-                        <div class="w-10 h-10 rounded-full <%= (order.status.includes('Confirm') || order.status.includes('Shipped') || order.status.includes('Delivered')) ? 'bg-blue-600 shadow-lg shadow-blue-200' : 'bg-slate-100' %> flex items-center justify-center text-white">
+                        <div class="w-10 h-10 rounded-full <%= (!s.includes('PENDING') && !s.includes('CANCELLED')) ? 'bg-blue-600 shadow-lg shadow-blue-200' : 'bg-slate-100 text-slate-300' %> flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-black uppercase italic <%= order.status.includes('Confirm') ? 'text-slate-900' : 'text-slate-400' %>">Confirmed</p>
-                            <p class="text-[9px] font-bold text-slate-400">Verified & Ready for Dispatch</p>
+                            <p class="text-xs font-black uppercase italic <%= (!s.includes('PENDING') && !s.includes('CANCELLED')) ? 'text-slate-900' : 'text-slate-300' %>">Processing</p>
+                            <p class="text-[9px] font-bold text-slate-400">Packed & Ready</p>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-6">
-                        <div class="w-10 h-10 rounded-full <%= (order.status.includes('Shipped') || order.status.includes('Delivered')) ? 'bg-blue-600 shadow-lg shadow-blue-200' : 'bg-slate-100' %> flex items-center justify-center text-white">
+                        <div class="w-10 h-10 rounded-full <%= (s.includes('SHIPPED') || s.includes('DELIVERED')) ? 'bg-blue-600 shadow-lg shadow-blue-200' : 'bg-slate-100 text-slate-300' %> flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-black uppercase italic <%= order.status.includes('Shipped') ? 'text-slate-900' : 'text-slate-400' %>">Shipped</p>
-                            <p class="text-[9px] font-bold text-slate-400">On the way via Courier</p>
+                            <p class="text-xs font-black uppercase italic <%= (s.includes('SHIPPED') || s.includes('DELIVERED')) ? 'text-slate-900' : 'text-slate-300' %>">In Transit</p>
+                            <p class="text-[9px] font-bold text-slate-400">Shipped via Courier</p>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-6">
-                        <div class="w-10 h-10 rounded-full <%= order.status.includes('Delivered') ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-slate-100' %> flex items-center justify-center text-white">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M0 6c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h12V6H2z"/></svg>
+                        <div class="w-10 h-10 rounded-full <%= s.includes('DELIVERED') ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-slate-100 text-slate-300' %> flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-black uppercase italic <%= order.status.includes('Delivered') ? 'text-green-600' : 'text-slate-400' %>">Delivered</p>
-                            <p class="text-[9px] font-bold text-slate-400">Package handed over to you</p>
+                            <p class="text-xs font-black uppercase italic <%= s.includes('DELIVERED') ? 'text-green-600' : 'text-slate-300' %>">Delivered</p>
+                            <p class="text-[9px] font-bold text-slate-400">Handed over successfully</p>
                         </div>
                     </div>
                 </div>
@@ -106,17 +112,13 @@
             
             <div class="relative z-10 text-center">
                 <div class="inline-block bg-green-500/10 text-green-400 px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest mb-4">Live Support</div>
-                <h3 class="text-2xl font-black italic uppercase tracking-tighter mb-6 text-white">Luxe <span class="text-green-500">Group</span> Help</h3>
+                <h3 class="text-2xl font-black italic uppercase tracking-tighter mb-6">Luxe <span class="text-green-500">Group</span> Help</h3>
                 
                 <a href="https://chat.whatsapp.com/GfbhmhHpZunC5IN6e96UaM" 
                    target="_blank"
                    class="block w-full bg-[#25D366] hover:bg-[#128C7E] py-5 rounded-[1.8rem] font-black uppercase text-[11px] tracking-[0.2em] shadow-xl shadow-green-600/20 transition-all active:scale-95">
                     Join Support Group
                 </a>
-                
-                <p class="text-[9px] font-bold text-slate-500 uppercase mt-5 tracking-widest">
-                    Track Orders • Get Help • Fast Support
-                </p>
             </div>
         </div>
     </main>

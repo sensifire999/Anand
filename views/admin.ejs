@@ -3,142 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Admin | LuxeStore</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>LuxeStore | Admin Command Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0f172a; color: #f8fafc; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .gradient-border { border: 2px solid transparent; background-image: linear-gradient(#0f172a, #0f172a), radial-gradient(circle at top left, #3b82f6,#9333ea); background-origin: border-box; background-clip: padding-box, border-box; }
-        .stat-card { transition: transform 0.3s ease; }
-        .stat-card:hover { transform: translateY(-5px); }
+        :root { --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --bg: #0b0f1a; --card-bg: #161b2c; --text: #ffffff; --text-dim: #94a3b8; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 15px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #2d3748; margin-bottom: 25px; }
+        .header h1 { font-size: 1.3rem; letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+        .signout-btn { background: var(--danger); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 0.7rem; font-weight: bold; }
+
+        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
+        .stat-box { background: var(--card-bg); padding: 15px; border-radius: 18px; border: 1px solid #2d3748; text-align: center; }
+        .stat-box p { color: var(--text-dim); margin: 0; font-size: 0.7rem; text-transform: uppercase; }
+        .stat-box h2 { margin: 5px 0 0 0; font-size: 1.4rem; color: var(--primary); }
+
+        .section-title { font-size: 1rem; font-weight: 700; margin: 25px 0 15px 0; text-transform: uppercase; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; }
+
+        /* --- ORDER CARD --- */
+        .order-card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 20px; border: 1px solid #2d3748; position: relative; }
+        .customer-name { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
+        .customer-info { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.5; }
+        
+        .items-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid #2d3748; }
+        .item-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #2d3748; font-size: 0.8rem; }
+        .item-row:last-child { border: none; }
+
+        .status-label { font-size: 0.7rem; font-weight: bold; color: var(--text-dim); margin-bottom: 5px; display: block; }
+        .status-select { background: #0b0f1a; color: white; border: 1px solid var(--primary); padding: 10px; border-radius: 10px; font-size: 0.85rem; width: 100%; font-weight: bold; outline: none; }
+        
+        /* Status Colors */
+        .status-select option { background: #161b2c; }
+
+        /* --- PRODUCT INVENTORY --- */
+        .admin-form { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid #2d3748; margin-top: 20px; }
+        input, textarea { width: 100%; background: #0b0f1a; border: 1px solid #2d3748; padding: 12px; border-radius: 10px; color: white; margin-bottom: 10px; box-sizing: border-box; font-size: 0.9rem; }
+        .submit-btn { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
+
+        .product-list-item { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #2d3748; }
+        .prod-img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 1px solid var(--primary); }
+        .del-icon { color: var(--danger); font-size: 1.1rem; cursor: pointer; padding: 5px; }
     </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen">
+<body>
 
-    <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-            <div>
-                <h1 class="text-4xl font-black italic tracking-tighter uppercase">Luxe <span class="text-blue-500">Command</span> Center</h1>
-                <p class="text-slate-400 text-xs font-bold uppercase tracking-[4px] mt-2">Welcome Back, Chief Admin</p>
-            </div>
-            <div class="flex gap-4">
-                <a href="/" class="glass px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">Storefront</a>
-                <a href="/logout" class="bg-red-500/10 text-red-500 border border-red-500/20 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest">Sign Out</a>
-            </div>
+    <div class="header">
+        <h1>LUXE<span style="color: var(--primary);">ADMIN</span></h1>
+        <a href="/logout" class="signout-btn">LOGOUT</a>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-box">
+            <p>Revenue</p>
+            <h2>₹<%= stats.sales %></h2>
         </div>
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div class="glass p-6 rounded-[32px] stat-card">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Revenue</p>
-                <h3 class="text-3xl font-black mt-2 text-blue-400">₹<%= stats.sales %></h3>
-            </div>
-            <div class="glass p-6 rounded-[32px] stat-card">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Advance Recv.</p>
-                <h3 class="text-3xl font-black mt-2 text-emerald-400">₹<%= stats.advance %></h3>
-            </div>
-            <div class="glass p-6 rounded-[32px] stat-card">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Live Orders</p>
-                <h3 class="text-3xl font-black mt-2"><%= stats.ordersCount %></h3>
-            </div>
-            <div class="glass p-6 rounded-[32px] stat-card">
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active Users</p>
-                <h3 class="text-3xl font-black mt-2"><%= stats.users %></h3>
-            </div>
+        <div class="stat-box">
+            <p>Orders</p>
+            <h2><%= stats.ordersCount %></h2>
         </div>
+    </div>
 
-        <div class="grid lg:grid-cols-12 gap-10">
-            <div class="lg:col-span-8 space-y-8">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-black uppercase italic tracking-widest">Recent Orders</h2>
-                    <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
+    <div class="section-title">Order Management</div>
+    <% if(orders && orders.length > 0) { %>
+        <% orders.forEach(order => { %>
+            <div class="order-card" id="card-<%= order.id %>">
+                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--primary); font-weight: 800; margin-bottom: 8px;">
+                    <span>ORDER #<%= order.id %></span>
+                    <span><%= order.date %></span>
+                </div>
+                <div class="customer-name"><%= order.fullname %></div>
+                <div class="customer-info">
+                    <i class="fa fa-phone"></i> <strong><%= order.phone %></strong> <br>
+                    <i class="fa fa-map-marker-alt"></i> <%= order.address %> <br>
+                    <span style="color: var(--warning); font-weight: bold;">UTR: <%= order.utr %></span>
                 </div>
 
-                <div class="space-y-4">
-                    <% orders.forEach(order => { %>
-                        <div class="glass p-6 rounded-[35px] border-l-4 border-blue-500 hover:bg-white/5 transition-all">
-                            <div class="flex flex-col md:flex-row justify-between gap-4">
-                                <div>
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <span class="text-[9px] font-black bg-blue-600 px-3 py-1 rounded-full uppercase">#<%= order.id %></span>
-                                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest"><%= order.date %></span>
-                                    </div>
-                                    <h4 class="text-lg font-black uppercase tracking-tight"><%= order.fullname %></h4>
-                                    <p class="text-xs text-slate-400 font-medium mt-1 mb-3"><%= order.address %></p>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-[10px] font-black text-emerald-400">UTR: <%= order.utr %></span>
-                                    </div>
-                                </div>
-                                <div class="text-right flex flex-col justify-between">
-                                    <select onchange="updateStatus('<%= order.id %>', this.value)" 
-                                            class="bg-slate-800 border-none rounded-xl text-[10px] font-black p-3 outline-none uppercase tracking-widest">
-                                        <option value="🕒 Pending" <%= order.status === '🕒 Pending' ? 'selected' : '' %>>🕒 Pending</option>
-                                        <option value="🚚 Shipped" <%= order.status === '🚚 Shipped' ? 'selected' : '' %>>🚚 Shipped</option>
-                                        <option value="✅ Delivered" <%= order.status === '✅ Delivered' ? 'selected' : '' %>>✅ Delivered</option>
-                                        <option value="❌ Cancelled" <%= order.status === '❌ Cancelled' ? 'selected' : '' %>>❌ Cancelled</option>
-                                    </select>
-                                    <p class="text-2xl font-black text-blue-400 mt-4">₹<%= order.advance %></p>
-                                </div>
-                            </div>
+                <div class="items-box">
+                    <span style="font-size: 0.7rem; color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px;">ITEMS</span>
+                    <% order.items.forEach(item => { %>
+                        <div class="item-row">
+                            <span><%= item.name %></span>
+                            <span style="font-weight: 700;">₹<%= item.price %></span>
                         </div>
                     <% }) %>
-                </div>
-            </div>
-
-            <div class="lg:col-span-4 space-y-10">
-                <div class="gradient-border p-8 rounded-[40px]">
-                    <h2 class="text-lg font-black uppercase italic mb-6 tracking-widest">Inventory Add</h2>
-                    <form action="/admin/add-product" method="POST" class="space-y-4">
-                        <input type="text" name="name" placeholder="PRODUCT NAME" class="w-full bg-slate-800/50 border-none rounded-2xl p-4 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="number" name="price" placeholder="PRICE (INR)" class="w-full bg-slate-800/50 border-none rounded-2xl p-4 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <input type="text" name="images" placeholder="IMAGE URLS (Comma separated)" class="w-full bg-slate-800/50 border-none rounded-2xl p-4 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <textarea name="desc" placeholder="PRODUCT DESCRIPTION" class="w-full bg-slate-800/50 border-none rounded-2xl p-4 text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 py-5 rounded-2xl font-black text-[10px] uppercase tracking-[3px] shadow-xl transition-all active:scale-95">Push to Store</button>
-                    </form>
-                </div>
-
-                <div class="glass p-8 rounded-[40px]">
-                    <h2 class="text-lg font-black uppercase italic mb-6 tracking-widest text-slate-400">Current Items</h2>
-                    <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                        <% products.forEach(p => { %>
-                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-700">
-                                        <img src="<%= Array.isArray(p.images) ? p.images[0] : p.image %>" class="w-full h-full object-cover">
-                                    </div>
-                                    <p class="text-[11px] font-black uppercase truncate w-24"><%= p.name %></p>
-                                </div>
-                                <button onclick="deleteProduct('<%= p.id %>')" class="text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 6h18m-2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
-                                </button>
-                            </div>
-                        <% }) %>
+                    <div style="text-align: right; margin-top: 10px; font-weight: 900; color: var(--success); font-size: 1.1rem;">
+                        Total: ₹<%= order.totalPrice %>
                     </div>
                 </div>
+
+                <span class="status-label">UPDATE ORDER STATUS:</span>
+                <select class="status-select" onchange="updateStatus('<%= order.id %>', this.value)" 
+                        style="border-color: <%= order.status.includes('DELIVERED') ? '#10b981' : (order.status.includes('CANCELLED') ? '#ef4444' : '#3b82f6') %>">
+                    <option value="🕒 PENDING" <%= order.status === '🕒 PENDING' ? 'selected' : '' %>>🕒 PENDING</option>
+                    <option value="✅ SHIPPED" <%= order.status === '✅ SHIPPED' ? 'selected' : '' %>>✅ SHIPPED</option>
+                    <option value="🚚 DELIVERED" <%= order.status === '🚚 DELIVERED' ? 'selected' : '' %>>🚚 DELIVERED</option>
+                    <option value="❌ CANCELLED" <%= order.status === '❌ CANCELLED' ? 'selected' : '' %>>❌ CANCELLED</option>
+                </select>
             </div>
+        <% }) %>
+    <% } else { %>
+        <p style="text-align: center; color: var(--text-dim); padding: 40px 0;">No orders found.</p>
+    <% } %>
+
+    <div class="section-title">Inventory Control</div>
+    <div class="admin-form">
+        <form action="/admin/add-product" method="POST">
+            <input type="text" name="name" placeholder="Product Name" required>
+            <input type="number" name="price" placeholder="Price" required>
+            <input type="text" name="images" placeholder="Image URL (Direct link)" required>
+            <textarea name="desc" placeholder="Product details..." rows="2"></textarea>
+            <button type="submit" class="submit-btn">ADD TO STORE</button>
+        </form>
+
+        <div style="margin-top: 25px;">
+            <p style="font-size: 0.8rem; color: var(--primary); font-weight: 800; margin-bottom: 10px;">STOCK LIST</p>
+            <% if(products && products.length > 0) { %>
+                <% products.forEach(p => { %>
+                    <div class="product-list-item">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="<%= p.images[0] %>" class="prod-img">
+                            <div>
+                                <div style="font-size: 0.85rem; font-weight: 700;"><%= p.name %></div>
+                                <div style="font-size: 0.8rem; color: var(--success);">₹<%= p.price %></div>
+                            </div>
+                        </div>
+                        <i class="fas fa-trash-alt del-icon" onclick="deleteProduct('<%= p.id %>')"></i>
+                    </div>
+                <% }) %>
+            <% } %>
         </div>
     </div>
 
     <script>
-        function updateStatus(orderId, status) {
-            fetch('/admin/update-status', {
+        async function updateStatus(orderId, status) {
+            const res = await fetch('/admin/update-status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ orderId, status })
-            }).then(() => {
-                alert('🚀 Status Updated Successfully');
-                location.reload();
             });
+            if(res.ok) {
+                // UI update feedback
+                location.reload(); 
+            }
         }
 
-        function deleteProduct(id) {
-            if(confirm('🚨 Warning: Product will be removed permanently. Proceed?')) {
-                fetch('/admin/delete-product', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id })
-                }).then(() => location.reload());
-            }
+        async function deleteProduct(id) {
+            if(!confirm('Pakka delete karna hai?')) return;
+            const res = await fetch('/admin/delete-product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            if(res.ok) location.reload();
         }
     </script>
 </body>
