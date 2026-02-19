@@ -1,0 +1,16 @@
+{
+  "products": [
+    { "id": "1", "name": "7-in-1 Charging Station", "price": 1999, "images": ["https://images.unsplash.com/photo-1615526675159-e248c3021d3f?q=80&w=500&auto=format&fit=crop"], "desc": "Premium wireless charging dock for all devices." },
+    { "id": "2", "name": "Smart LED Glow Bars", "price": 1499, "images": ["https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=500&auto=format&fit=crop"], "desc": "RGB music sync lights for gaming setup." },
+    { "id": "3", "name": "Premium Wireless Earbuds", "price": 1999, "images": ["https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=500&auto=format&fit=crop"], "desc": "Noise cancelling deep bass earbuds." },
+    { "id": "4", "name": "Compact Mini Projector", "price": 4999, "images": ["https://images.unsplash.com/photo-1535016120720-40c646be8958?q=80&w=500&auto=format&fit=crop"], "desc": "Portable cinema for your bedroom." },
+    { "id": "5", "name": "Smart Fitness Watch", "price": 1299, "images": ["https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?q=80&w=500&auto=format&fit=crop"], "desc": "Track steps, heart rate and sleep." },
+    { "id": "6", "name": "Magnetic Power Bank", "price": 1899, "images": ["https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?q=80&w=500&auto=format&fit=crop"], "desc": "Slim 10000mAh magnetic battery pack." },
+    { "id": "7", "name": "Urban Oversized Tee", "price": 899, "images": ["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=500&auto=format&fit=crop"], "desc": "Heavyweight cotton streetwear t-shirt." },
+    { "id": "8", "name": "Professional Frother", "price": 499, "images": ["https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?q=80&w=500&auto=format&fit=crop"], "desc": "Make cafe-style creamy coffee at home." },
+    { "id": "9", "name": "Anti-Gravity Air Lamp", "price": 2199, "images": ["https://images.unsplash.com/photo-1534073828943-f801091bb18c?q=80&w=500&auto=format&fit=crop"], "desc": "Floating water drops decor lamp." },
+    { "id": "10", "name": "Ergonomic Laptop Stand", "price": 799, "images": ["https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=500&auto=format&fit=crop"], "desc": "Foldable aluminum stand for better posture." }
+  ],
+  "orders": [],
+  "verified_users": []
+}
