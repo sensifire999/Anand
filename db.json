@@ -1,0 +1,17 @@
+{
+  "products": [
+    { "id": "1", "name": "7-in-1 Charging Station", "price": 1999, "images": ["https://m.media-amazon.com/images/I/61D5H6V8LGL._SL1500_.jpg"], "desc": "Charge everything at once." },
+    { "id": "2", "name": "Smart LED Glow Bars", "price": 1499, "images": ["https://m.media-amazon.com/images/I/71R2oD-E2HL._SL1500_.jpg"], "desc": "Music sync RGB lights." },
+    { "id": "3", "name": "AirPods Pro 2 Clone", "price": 1999, "images": ["https://m.media-amazon.com/images/I/61SUj2W5yXL._SL1500_.jpg"], "desc": "High quality ANC earbuds." },
+    { "id": "4", "name": "Mini Projector", "price": 4999, "images": ["https://m.media-amazon.com/images/I/71X8k7zG3NL._SL1500_.jpg"], "desc": "Home cinema experience." },
+    { "id": "5", "name": "Smart Fitness Band", "price": 1299, "images": ["https://m.media-amazon.com/images/I/61S9aVn9dDL._SL1500_.jpg"], "desc": "Track your health 24/7." },
+    { "id": "6", "name": "Magnetic Power Bank", "price": 1899, "images": ["https://m.media-amazon.com/images/I/61pB9S25vBL._SL1500_.jpg"], "desc": "10000mAh Slim Power." },
+    { "id": "7", "name": "Oversized Street Tee", "price": 899, "images": ["https://m.media-amazon.com/images/I/71wYkL9ySGL._SL1500_.jpg"], "desc": "Pure cotton streetwear." },
+    { "id": "8", "name": "Coffee Frother", "price": 499, "images": ["https://m.media-amazon.com/images/I/51A4zVv7M8L._SL1000_.jpg"], "desc": "Make cafe style coffee." },
+    { "id": "9", "name": "Anti-Gravity Lamp", "price": 2199, "images": ["https://m.media-amazon.com/images/I/61xYvF1zVLL._SL1500_.jpg"], "desc": "Water drops go upwards." },
+    { "id": "10", "name": "Laptop Stand", "price": 799, "images": ["https://m.media-amazon.com/images/I/61vYmN8vGLL._SL1500_.jpg"], "desc": "Foldable aluminum stand." }
+  ],
+  "orders": [],
+  "verified_users": []
+}
+
